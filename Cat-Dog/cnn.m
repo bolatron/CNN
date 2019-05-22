@@ -9,6 +9,12 @@ function cnn
   img{6}=imread('cat2.jpg');
   img{7}=imread('cat3.jpg');
   img{8}=imread('cat4.jpg');
+  img{9}=imread('dog5.jpg');
+  img{10}=imread('cat5.jpg');
+  img{11}=imread('cat6.png');
+  img{12}=imread('dog6.jpg');
+  img{13}=imread('dog7.jpg');
+  img{14}=imread('dog8.jpg');
   
 t1=[];
 t2=[];
@@ -36,13 +42,13 @@ p1=2;
 p2=4;
 qf=20;
   
- [output,t1,t2]=treinacnn(banco,[0:7],20000,t1,t2,qf,l,c,p1,p2,'s',0.01); 
- output*7
+ [output,t1,t2]=treinacnn(banco,[0:7],20000,t1,t2,qf,l,c,p1,p2,'s',0.01);
  
-for i=1:8
+for i=1:14
   i
-  saida=(testacnn(img{i},t1,t2,qf,l,c,p1,p2,'s'))
+  saida=(testacnn(img{i},t1,t2,qf,l,c,p1,p2,'s'))*10
 end
+%saida = (testacnn(img{9}, t1, t2, qf, l, c, p1, p2, 's')*10
 
 %  [output]=testacnn(img{2},t1,t2)
 %  
@@ -60,17 +66,16 @@ end
 %  teste=edge(d1,"Sobel");
 %  teste2=maxsoft(teste);
 %  teste3=maxpool(teste2,4,4);
-%  subplot(2,3,1),imshow(d1);
-%  subplot(2,3,2),imshow(teste2);
-%  subplot(2,3,3),imshow(teste3);
+%  subplot(2,3,1),%imshow(d1);
+%  subplot(2,3,2),%imshow(teste2);
+%  subplot(2,3,3),%imshow(teste3);
 %  teste4=edge(teste3,"Sobel");
 %  teste5=maxsoft(teste4);
 %  teste6=maxpool(teste5,4,4);
-%  subplot(2,3,4),imshow(teste4);
-%  subplot(2,3,5),imshow(teste5);
-%  subplot(2,3,6),imshow(teste6);
-  
-  end
+%  subplot(2,3,4),%imshow(teste4);
+%  subplot(2,3,5),%imshow(teste5);
+%  subplot(2,3,6),%imshow(teste6);
+end
 
  
 function [output]=testacnn(img,theta_1,theta_2,qf,l,c,p1,p2,tipo)
@@ -96,7 +101,6 @@ function [output,theta_1,theta_2]=treinacnn(image,y,iter,theta_1,theta_2,qf,l,c,
  x=[];
  banco=length(image);
  for i=1:banco
-     i/banco 
     [maxp,qf]=featuresmono(image{i},l,c,qf,p1,p2) ;
   for i=1:qf
     if tipo=='s'  
@@ -127,24 +131,24 @@ function [output,theta_1,theta_2]=treinacnn(image,y,iter,theta_1,theta_2,qf,l,c,
 end
 
 function [maxp,qf]=featuresmono(image,l,c,qf,p1,p2) 
-  imshow(image),drawnow;
+  %imshow(image),drawnow;
   img=rgb2gray(image);
-  imshow(img),drawnow;
+  %imshow(img),drawnow;
   img=imresize(img,[l,c]); 
-  imshow(img),drawnow;
+  %imshow(img),drawnow;
 %  img=edge(img,'sobel'); 
-  imshow(img,[]),drawnow;
+  %imshow(img,[]),drawnow;
   img=pool(img,p1,p1);
-  imshow(img,[]),drawnow;
+  %imshow(img,[]),drawnow;
   filt=convolucao(img);
   k=length(filt);
   if qf>k
     qf=k;
   end
   for j=1:qf
-    imshow(filt{j},[]),drawnow;
+    %imshow(filt{j},[]),drawnow;
     maxp{j}=pool(filt{j},p2,p2);
-    imshow(maxp{j},[]),drawnow;
+    %imshow(maxp{j},[]),drawnow;
    end
  end
 
@@ -246,9 +250,9 @@ end
 function maxp=pool(filt,l,c)
   
    maxs=maxsoft(filt);
-%% imshow(maxs,[]),drawnow;
+%% %imshow(maxs,[]),drawnow;
  maxp=maxpool(maxs,l,c);
-% imshow(maxp,[]),drawnow; 
+% %imshow(maxp,[]),drawnow; 
 end
 
 function [output] = testann(x,theta_1,theta_2,tipo)
@@ -285,7 +289,6 @@ function [output,theta_1,theta_2] = treinann(x,y,iter,tipo='s',lr=1)
   
   %laco para o numero de iterações para aprendizado
   for i=1:iter 
-      i/iter
     if tipo=='s'
     %calculo das saida de cada camada
      a{2}= 1./ (1+e.^-(theta_1*a{1}));
@@ -316,7 +319,7 @@ function [output,theta_1,theta_2] = treinann(x,y,iter,tipo='s',lr=1)
  
     end 
 
-   sum(erro_3)/length(erro_3)
+   sum(erro_3)/length(erro_3);
     
   end
   output = a{3};
@@ -355,9 +358,9 @@ function [pool]=maxpool(image,lm,cm)
         end  
         pool(pi,pj)=max(max(image(i:liml,j:limc)));
 %        j
-%    subplot(1,2,1),imshow(image(i:liml,j:limc));
-%    subplot(1,2,2),imshow(pool),drawnow
-       %     imshow(image(i:i+lm-1,j:j+cm-1));
+%    subplot(1,2,1),%imshow(image(i:liml,j:limc));
+%    subplot(1,2,2),%imshow(pool),drawnow
+       %     %imshow(image(i:i+lm-1,j:j+cm-1));
       end
     end
   end 
