@@ -14,3 +14,14 @@ function tst
     I = imread('Clavededo/clave1.jpg');
     disp(size(I));
 end
+
+function img = maxpool(img, stride_1, stride_2)
+    img = double(img);
+    fun = @(img) Max(img(:));
+    img = blockprop(img, [stride_1, stride_2], fun);
+end
+
+function img = convs(img, mask, stride_1, stride_2)
+    img = double(img);
+    filt = @(img) conv2(img, mask, 'valid');
+    img = blockprop(img, [stride_1, stride_2], filt);
